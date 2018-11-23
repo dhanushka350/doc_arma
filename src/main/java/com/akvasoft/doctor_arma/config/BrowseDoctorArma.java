@@ -84,11 +84,9 @@ public class BrowseDoctorArma implements InitializingBean {
         }
 
         Workbook workbook = new XSSFWorkbook();
-        createXlsFileInfoBetFootball(dataList, "Doctor Arama", workbook);
-
-
+        //createXlsFileInfoBetFootball(dataList, "Doctor Arama", workbook);
         new File("/var/lib/tomcat8/current").mkdir();
-        new File("/var/lib/tomcat8/history/doc").mkdirs();
+        new File("/var/lib/tomcat8/history/doc").mkdir();
 
         Calendar cal = Calendar.getInstance();
         FileOutputStream fileOut = new FileOutputStream("/var/lib/tomcat8/current/doc.xlsx");
@@ -99,7 +97,6 @@ public class BrowseDoctorArma implements InitializingBean {
         workbook.write(fileOut);
         fileOut.close();
 
-//        Closing the workbook
         workbook.close();
 
 
@@ -156,7 +153,7 @@ public class BrowseDoctorArma implements InitializingBean {
         }
 
         if (!isChangeComboOne) {
-            rowCountOne = 20;
+            rowCountOne = 0;
         }
         if (!isChangeComboTwo) {
             rowCountTwo = 0;
@@ -168,7 +165,7 @@ public class BrowseDoctorArma implements InitializingBean {
 
         for (int i = rowCountOne; i < combo1Size; i++) {
 
-            if (i == 30) {
+            if (i == 10) {
                 break;
             }
             for (int j = rowCountTwo; j < combo2Size; j++) {
