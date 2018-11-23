@@ -44,6 +44,7 @@ public class BrowseDoctorArma implements InitializingBean {
     String innerText2 = "";
     private String one = "";
     private String two = "";
+    ReplaceCharacters characters = new ReplaceCharacters();
 
     public void initialise() throws Exception {
 
@@ -67,7 +68,8 @@ public class BrowseDoctorArma implements InitializingBean {
 
         while (true) {
             try {
-                dataList = browseDoctorArmaModel2s();
+//                dataList = browseDoctorArmaModel2s();
+                clean();
                 System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -153,7 +155,7 @@ public class BrowseDoctorArma implements InitializingBean {
         }
 
         if (!isChangeComboOne) {
-            rowCountOne = 0;
+            rowCountOne = 65;
         }
         if (!isChangeComboTwo) {
             rowCountTwo = 0;
@@ -165,15 +167,15 @@ public class BrowseDoctorArma implements InitializingBean {
 
         for (int i = rowCountOne; i < combo1Size; i++) {
 
-            if (i == 10) {
+            if (i == 82) {
                 break;
             }
             for (int j = rowCountTwo; j < combo2Size; j++) {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
                 driver.findElementByXPath("//*[@id=\"form1:tabbedPanel1tabbedPanelhyperlink_2\"]").click();
                 driver.findElementByXPath("//*[@id=\"form1:cmbIl\"]").click();
                 driver.findElementByXPath("//*[@id=\"form1:menu1\"]").click();
-                Thread.sleep(1000);
+                Thread.sleep(1500);
                 WebElement currentCity = driver.findElementByXPath("//*[@id=\"form1:cmbIl\"]").findElements(By.xpath("./*")).get(i);
                 WebElement currentBranch = driver.findElementByXPath("//*[@id=\"form1:menu1\"]").findElements(By.xpath("./*")).get(j);
                 currentCity.click();
@@ -246,7 +248,7 @@ public class BrowseDoctorArma implements InitializingBean {
 
     private void checkDuplicateAndWrite(List<WebElement> mainList, String city, String branch, int lastRow) throws InterruptedException {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
-        ReplaceCharacters characters = new ReplaceCharacters();
+
         for (int i = lastRow; i < mainList.size(); i++) {
             WebElement mainTable = driver.findElementByXPath("/html/body/form/center/div/div[2]/div[1]/table/tbody");
             mainList = mainTable.findElement(By.tagName("table")).findElement(By.tagName("tbody")).findElement(By.tagName("table")).findElement(By.tagName("tbody")).findElements(By.tagName("tr"));
@@ -257,29 +259,6 @@ public class BrowseDoctorArma implements InitializingBean {
             System.out.println("Searching..");
 
             boolean isDuplicate = false;
-//            try {
-//                BrowseDoctorArmaModel2 duplicate = doctor.findAllByOrderByIdDesc();
-//                if
-//                (duplicate.getAcademicTitle().equalsIgnoreCase(atitle)
-//                        && duplicate.getTitle().equalsIgnoreCase(title)
-//                        && duplicate.getSurname().equalsIgnoreCase(surname)
-//                        && duplicate.getBranch().equalsIgnoreCase(characters.replace(branch))
-//                        && duplicate.getCity().equalsIgnoreCase(characters.replace(city))) {
-//
-//                    System.err.println("Skipping Duplicate Found in Main Page..");
-//                    System.err.println(atitle + "---" + title + "---" + surname + "---" + name + "---" + city + "---" + branch);
-//                    System.err.println(duplicate.getAcademicTitle() + "---" + duplicate.getTitle() + "---" + duplicate.getSurname() + "---" + duplicate.getName() + "---" + duplicate.getCity() + "---" + duplicate.getBranch());
-//
-//                    isDuplicate = true;
-//
-//                }
-//
-//                if (isDuplicate) {
-//                    continue;
-//                }
-//
-//            } catch (NullPointerException g) {
-//            }
 
             System.out.println("No Duplicate Found..");
             String workspace = mainList.get(i).findElements(By.tagName("td")).get(4).getAttribute("innerText");
@@ -435,7 +414,7 @@ public class BrowseDoctorArma implements InitializingBean {
             ReplaceCharacters characters = new ReplaceCharacters();
 
             System.out.println("ENTERED PAGE - " + driver.getCurrentUrl());
-            Thread.sleep(3000); // 20 000
+            Thread.sleep(5000); // 20 000
             m = new BrowseDoctorArmaModel2();
             WebElement table_one = driver.findElementByXPath("/html/body/center/div/div[2]/div[1]/form/table/tbody/tr[1]/td[1]/div[1]/table/tbody");
             String Akademik_Unvan = table_one.findElements(By.xpath("./*")).get(1).findElements(By.xpath("./*")).get(2).getAttribute("innerText");
@@ -632,6 +611,53 @@ public class BrowseDoctorArma implements InitializingBean {
 //        }
 //
 //
+    }
+
+    public boolean clean() {
+        List<BrowseDoctorArmaModel2> list = new ArrayList<>();
+        System.out.println("called");
+        List<BrowseDoctorArmaModel2> all = doctor.findAll();
+        System.out.println(all.size());
+
+        for (BrowseDoctorArmaModel2 model2 : doctor.findAll()) {
+            boolean duplicate = false;
+            for (BrowseDoctorArmaModel2 collect : list) {
+                if (collect.getAcademicTitle().equalsIgnoreCase(model2.getAcademicTitle())
+                        &&
+                        collect.getTitle().equalsIgnoreCase(model2.getTitle())
+                        &&
+                        collect.getName().equalsIgnoreCase(model2.getName())
+                        &&
+                        collect.getCity().equalsIgnoreCase(model2.getCity())
+                        &&
+                        collect.getBranch().equalsIgnoreCase(model2.getBranch())
+                        &&
+                        collect.getBirth_year().equalsIgnoreCase(model2.getBirth_year())
+                        &&
+                        collect.getGender().equalsIgnoreCase(model2.getGender())
+                        &&
+                        collect.getNationality().equalsIgnoreCase(model2.getNationality())
+                        &&
+                        collect.getSurname().equalsIgnoreCase(model2.getSurname())
+                        &&
+                        collect.getWorkplace().equalsIgnoreCase(model2.getWorkplace())
+                        &&
+                        collect.getPersonnel_type().equalsIgnoreCase(model2.getPersonnel_type())) {
+
+                    doctor.delete(model2);
+                    System.err.println("deleting duplicate entry....");
+                    duplicate = true;
+                    break;
+                }
+
+            }
+            if (!duplicate) {
+                System.out.println("added to save list..");
+                list.add(model2);
+            }
+        }
+        doctor.saveAll(list);
+        return true;
     }
 
     @Override
